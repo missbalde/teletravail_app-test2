@@ -34,7 +34,10 @@ export default function BadgeusePage() {
   const loadEmployees = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/employees`);
-      setEmployees(response.data);
+      // Sécurise pour toujours avoir un tableau
+      const data = response.data;
+      const employeesArray = Array.isArray(data) ? data : (Array.isArray(data.employees) ? data.employees : []);
+      setEmployees(employeesArray);
       setBackendConnected(true);
     } catch (error) {
       console.error('Erreur chargement employés:', error);
