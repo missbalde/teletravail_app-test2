@@ -21,7 +21,7 @@ export default function BadgeusePage() {
   // Vérifier la connexion au backend
   const checkBackendConnection = async () => {
     try {
-      await axios.get('http://localhost:4000/api/employees');
+      await axios.get(`${import.meta.env.VITE_API_URL}/api/employees`);
       setBackendConnected(true);
     } catch (error) {
       console.error('Erreur connexion backend:', error);
@@ -33,7 +33,7 @@ export default function BadgeusePage() {
   // Charger les employés
   const loadEmployees = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/employees');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/employees`);
       setEmployees(response.data);
       setBackendConnected(true);
     } catch (error) {
@@ -64,7 +64,7 @@ export default function BadgeusePage() {
     setMessage('');
 
     try {
-      const response = await axios.post('http://localhost:4000/api/pointages', {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/pointages`, {
         employee_id: selectedEmployee,
         type_pointage: type
       });
