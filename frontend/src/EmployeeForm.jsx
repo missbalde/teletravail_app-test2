@@ -75,11 +75,11 @@ export default function EmployeeForm({ onEmployeeAdded, selectedEmployee }) {
       // Réinitialiser les champs APRÈS le callback pour éviter les conflits
       if (!selectedEmployee) {
         // Seulement pour un nouvel employé
-        setNom('');
-        setPrenom('');
-        setEmail('');
-        setPoste('');
-        setTelephone('');
+      setNom('');
+      setPrenom('');
+      setEmail('');
+      setPoste('');
+      setTelephone('');
         setPassword('');
       } else {
         // Pour une modification, juste vider le mot de passe

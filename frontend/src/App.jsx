@@ -21,25 +21,25 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <Routes>
-        {/* Page login accessible uniquement si pas connecté */}
+    <Routes>
+      {/* Page login accessible uniquement si pas connecté */}
         {!user && <Route path="/" element={<Login />} />}
 
-        {/* Route publique pour la badgeuse */}
-        <Route path="/badgeuse" element={<BadgeusePage />} />
+      {/* Route publique pour la badgeuse */}
+      <Route path="/badgeuse" element={<BadgeusePage />} />
 
         {/* Route publique pour le pointage QR code */}
         <Route path="/pointage/qr/:employee_id" element={<QrPointage />} />
 
-        {/* Routes protégées */}
-        <Route 
-          path="/dashboard" 
-          element={
+      {/* Routes protégées */}
+      <Route 
+        path="/dashboard" 
+        element={
             <PrivateRoute requiredRole="admin">
-              <Dashboard />
-            </PrivateRoute>
-          } 
-        />
+            <Dashboard />
+          </PrivateRoute>
+        } 
+      />
 
         <Route 
           path="/salarie" 
@@ -58,9 +58,9 @@ export default function App() {
           </>
         )}
 
-        {/* Si utilisateur non connecté, toute autre route va à la login */}
+      {/* Si utilisateur non connecté, toute autre route va à la login */}
         {!user && <Route path="*" element={<Navigate to="/" replace />} />}
-      </Routes>
+    </Routes>
     </ErrorBoundary>
   );
 }

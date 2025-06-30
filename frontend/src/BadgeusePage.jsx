@@ -99,133 +99,133 @@ export default function BadgeusePage() {
       <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100vw' }}>
         <div style={{ width: '100%', maxWidth: 600 }}>
           <div className="card shadow-lg border-0" style={{ width: '100%' }}>
-            <div className="card-header bg-primary text-white text-center py-4">
-              <div className="h3 mb-0">
-                {currentTime.toLocaleTimeString('fr-FR')}
-              </div>
-              <div className="text-light mt-2">
-                {currentTime.toLocaleDateString('fr-FR', { 
-                  weekday: 'long', 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
-                })}
-              </div>
-            </div>
-
-            <div className="card-body p-5">
-              {/* Statut de connexion */}
-              {!backendConnected && (
-                <div className="alert alert-warning mb-4" role="alert">
-                  <strong>Attention :</strong> Le serveur backend n'est pas accessible. 
-                  Vérifiez qu'il est démarré sur le port 4000.
+              <div className="card-header bg-primary text-white text-center py-4">
+                <div className="h3 mb-0">
+                  {currentTime.toLocaleTimeString('fr-FR')}
                 </div>
-              )}
-
-              {/* Message de feedback */}
-              {message && (
-                <div className={`alert ${message.includes('Erreur') ? 'alert-danger' : 'alert-success'} alert-dismissible fade show mb-4`} role="alert">
-                  {message}
-                  <button type="button" className="btn-close" onClick={() => setMessage('')}></button>
+                <div className="text-light mt-2">
+                  {currentTime.toLocaleDateString('fr-FR', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}
                 </div>
-              )}
-
-              {/* Sélection employé */}
-              <div className="mb-5">
-                <label className="form-label fw-bold fs-4 text-center d-block mb-4">
-                  Sélectionner votre nom :
-                </label>
-                <select
-                  className="form-select form-select-lg"
-                  value={selectedEmployee}
-                  onChange={(e) => setSelectedEmployee(e.target.value)}
-                  style={{ fontSize: '1.2rem' }}
-                  disabled={!backendConnected}
-                >
-                  <option value="">-- Choisir un employé --</option>
-                  {employees.map(employee => (
-                    <option key={employee.id} value={employee.id}>
-                      {employee.nom} {employee.prenom} - {employee.poste}
-                    </option>
-                  ))}
-                </select>
               </div>
 
-              {/* Boutons de pointage */}
-              {selectedEmployee && backendConnected && (
-                <div className="text-center">
-                  <h3 className="mb-4">
-                    Bonjour <strong>
-                      {employees.find(emp => emp.id == selectedEmployee)?.prenom} {' '}
-                      {employees.find(emp => emp.id == selectedEmployee)?.nom}
-                    </strong>
-                  </h3>
-                  
-                  <div className="row justify-content-center g-4">
-                    <div className="col-md-6">
-                      <button
-                        className="btn btn-success btn-lg w-100 py-4"
-                        onClick={() => handlePointage('arrivee')}
-                        disabled={loading}
-                        style={{ fontSize: '1.3rem', fontWeight: 'bold' }}
-                      >
-                        {loading ? (
-                          <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                        ) : (
-                          <span className="me-2">→</span>
-                        )}
+              <div className="card-body p-5">
+                {/* Statut de connexion */}
+                {!backendConnected && (
+                  <div className="alert alert-warning mb-4" role="alert">
+                    <strong>Attention :</strong> Le serveur backend n'est pas accessible. 
+                    Vérifiez qu'il est démarré sur le port 4000.
+                  </div>
+                )}
+
+                {/* Message de feedback */}
+                {message && (
+                  <div className={`alert ${message.includes('Erreur') ? 'alert-danger' : 'alert-success'} alert-dismissible fade show mb-4`} role="alert">
+                    {message}
+                    <button type="button" className="btn-close" onClick={() => setMessage('')}></button>
+                  </div>
+                )}
+
+                {/* Sélection employé */}
+                <div className="mb-5">
+                  <label className="form-label fw-bold fs-4 text-center d-block mb-4">
+                    Sélectionner votre nom :
+                  </label>
+                  <select
+                    className="form-select form-select-lg"
+                    value={selectedEmployee}
+                    onChange={(e) => setSelectedEmployee(e.target.value)}
+                    style={{ fontSize: '1.2rem' }}
+                    disabled={!backendConnected}
+                  >
+                    <option value="">-- Choisir un employé --</option>
+                    {employees.map(employee => (
+                      <option key={employee.id} value={employee.id}>
+                        {employee.nom} {employee.prenom} - {employee.poste}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Boutons de pointage */}
+                {selectedEmployee && backendConnected && (
+                  <div className="text-center">
+                    <h3 className="mb-4">
+                      Bonjour <strong>
+                        {employees.find(emp => emp.id == selectedEmployee)?.prenom} {' '}
+                        {employees.find(emp => emp.id == selectedEmployee)?.nom}
+                      </strong>
+                    </h3>
+                    
+                    <div className="row justify-content-center g-4">
+                      <div className="col-md-6">
+                        <button
+                          className="btn btn-success btn-lg w-100 py-4"
+                          onClick={() => handlePointage('arrivee')}
+                          disabled={loading}
+                          style={{ fontSize: '1.3rem', fontWeight: 'bold' }}
+                        >
+                          {loading ? (
+                            <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                          ) : (
+                            <span className="me-2">→</span>
+                          )}
                         POINTAGE ARRIVÉE
-                      </button>
-                    </div>
-                    <div className="col-md-6">
-                      <button
-                        className="btn btn-danger btn-lg w-100 py-4"
-                        onClick={() => handlePointage('depart')}
-                        disabled={loading}
-                        style={{ fontSize: '1.3rem', fontWeight: 'bold' }}
-                      >
-                        {loading ? (
-                          <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                        ) : (
-                          <span className="me-2">←</span>
-                        )}
+                        </button>
+                      </div>
+                      <div className="col-md-6">
+                        <button
+                          className="btn btn-danger btn-lg w-100 py-4"
+                          onClick={() => handlePointage('depart')}
+                          disabled={loading}
+                          style={{ fontSize: '1.3rem', fontWeight: 'bold' }}
+                        >
+                          {loading ? (
+                            <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                          ) : (
+                            <span className="me-2">←</span>
+                          )}
                         POINTAGE DÉPART
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="mt-4">
+                      <button
+                        className="btn btn-outline-secondary btn-lg"
+                        onClick={() => setSelectedEmployee('')}
+                      >
+                        Changer d'employé
                       </button>
                     </div>
                   </div>
+                )}
 
-                  <div className="mt-4">
-                    <button
-                      className="btn btn-outline-secondary btn-lg"
-                      onClick={() => setSelectedEmployee('')}
+                {/* Instructions */}
+                {!selectedEmployee && backendConnected && (
+                  <div className="text-center text-muted mt-5">
+                    <h4>Sélectionnez votre nom dans la liste ci-dessus</h4>
+                    <p className="fs-5">Puis cliquez sur "Arrivée" ou "Départ"</p>
+                  </div>
+                )}
+
+                {/* Message si pas de connexion */}
+                {!backendConnected && (
+                  <div className="text-center text-muted mt-5">
+                    <h4>Serveur non accessible</h4>
+                    <p className="fs-5">Veuillez démarrer le serveur backend</p>
+                    <button 
+                      className="btn btn-primary"
+                      onClick={checkBackendConnection}
                     >
-                      Changer d'employé
+                      Réessayer la connexion
                     </button>
                   </div>
-                </div>
-              )}
-
-              {/* Instructions */}
-              {!selectedEmployee && backendConnected && (
-                <div className="text-center text-muted mt-5">
-                  <h4>Sélectionnez votre nom dans la liste ci-dessus</h4>
-                  <p className="fs-5">Puis cliquez sur "Arrivée" ou "Départ"</p>
-                </div>
-              )}
-
-              {/* Message si pas de connexion */}
-              {!backendConnected && (
-                <div className="text-center text-muted mt-5">
-                  <h4>Serveur non accessible</h4>
-                  <p className="fs-5">Veuillez démarrer le serveur backend</p>
-                  <button 
-                    className="btn btn-primary"
-                    onClick={checkBackendConnection}
-                  >
-                    Réessayer la connexion
-                  </button>
-                </div>
-              )}
+                )}
             </div>
           </div>
         </div>

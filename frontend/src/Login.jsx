@@ -31,7 +31,7 @@ export default function Login() {
       
       // Rediriger selon le rôle
       if (data.user.role === 'admin') {
-        navigate('/dashboard');
+      navigate('/dashboard');
       } else {
         navigate('/salarie');
       }

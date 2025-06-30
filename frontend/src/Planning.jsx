@@ -52,17 +52,17 @@ export default function Planning() {
     axios.get('http://localhost:4000/api/plannings')
       .then(res => {
         try {
-          const mapped = res.data.map(p => {
+        const mapped = res.data.map(p => {
             // Vérification des données avant traitement
             if (!p.date || !p.start_time || !p.end_time) {
               console.warn('Données manquantes pour l\'événement:', p);
               return null;
             }
 
-            // Extraire uniquement la date YYYY-MM-DD (sans fuseau)
-            const dateOnly = moment(p.date).format('YYYY-MM-DD');
-            const start = moment(`${dateOnly} ${p.start_time}`, 'YYYY-MM-DD HH:mm:ss').toDate();
-            const end = moment(`${dateOnly} ${p.end_time}`, 'YYYY-MM-DD HH:mm:ss').toDate();
+          // Extraire uniquement la date YYYY-MM-DD (sans fuseau)
+          const dateOnly = moment(p.date).format('YYYY-MM-DD');
+          const start = moment(`${dateOnly} ${p.start_time}`, 'YYYY-MM-DD HH:mm:ss').toDate();
+          const end = moment(`${dateOnly} ${p.end_time}`, 'YYYY-MM-DD HH:mm:ss').toDate();
 
             // Vérification que les dates sont valides
             if (!moment(start).isValid() || !moment(end).isValid()) {
@@ -70,18 +70,18 @@ export default function Planning() {
               return null;
             }
 
-            return {
-              id: p.id,
-              user_id: p.user_id,
+          return {
+            id: p.id,
+            user_id: p.user_id,
               nom: p.nom || 'Nom inconnu',
               task: p.task || 'Tâche non définie',
               title: `${p.nom || 'Nom inconnu'} - ${p.task || 'Tâche non définie'}`,
-              start,
-              end,
-            };
+            start,
+            end,
+          };
           }).filter(event => event !== null); // Filtrer les événements null
           
-          setEvents(mapped);
+        setEvents(mapped);
         } catch (mappingError) {
           console.error('Erreur lors du mapping des événements:', mappingError);
           setError('Erreur lors du traitement des données du planning');
@@ -328,9 +328,9 @@ export default function Planning() {
                   onClick={async () => {
                     if (window.confirm('Voulez-vous supprimer cette tâche ?')) {
                       try {
-                        await axios.delete(`http://localhost:4000/api/plannings/${selectedEvent.id}`);
-                        setShowModal(false);
-                        loadEvents();
+                      await axios.delete(`http://localhost:4000/api/plannings/${selectedEvent.id}`);
+                      setShowModal(false);
+                      loadEvents();
                       } catch (err) {
                         console.error('Erreur lors de la suppression:', err);
                         alert('Erreur lors de la suppression de la tâche');
