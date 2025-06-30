@@ -22,7 +22,7 @@ export default function PointageView() {
   // Charger la liste des employés
   const loadEmployees = async () => {
     try {
-      const response = await axios.get('http://localhost:4000/api/employees');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/employees`);
       setEmployees(response.data);
     } catch (error) {
       console.error('Erreur chargement employés:', error);
@@ -36,7 +36,7 @@ export default function PointageView() {
     
     console.log('Début chargement pointages...');
     
-    axios.get('http://localhost:4000/api/pointages')
+    axios.get(`${import.meta.env.VITE_API_URL}/api/pointages`)
       .then(res => {
         console.log('Réponse API reçue:', res);
         console.log('Données pointages reçues:', res.data);
@@ -174,7 +174,7 @@ export default function PointageView() {
     
     if (window.confirm('Êtes-vous sûr de vouloir supprimer ce pointage ?')) {
       try {
-        await axios.delete(`http://localhost:4000/api/pointages/${pointageId}`);
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/pointages/${pointageId}`);
         alert('Pointage supprimé avec succès !');
         loadPointages();
       } catch (err) {
@@ -389,7 +389,7 @@ export default function PointageView() {
   // Générer la fiche PDF pour un salarié et un mois donné
   const handleDownloadPDFMonth = () => {
     if (!modalEmployee || !selectedMonth) return;
-    axios.get('http://localhost:4000/api/pointages?employee_id=' + modalEmployee.id)
+    axios.get(`${import.meta.env.VITE_API_URL}/api/pointages?employee_id=` + modalEmployee.id)
       .then(res => {
         const allPointages = res.data || [];
         // Filtrer par mois/année
@@ -429,7 +429,7 @@ export default function PointageView() {
   // Générer la fiche Excel pour un salarié et un mois donné
   const handleDownloadExcelMonth = () => {
     if (!modalEmployee || !selectedMonth) return;
-    axios.get('http://localhost:4000/api/pointages?employee_id=' + modalEmployee.id)
+    axios.get(`${import.meta.env.VITE_API_URL}/api/pointages?employee_id=` + modalEmployee.id)
       .then(res => {
         const allPointages = res.data || [];
         // Filtrer par mois/année
