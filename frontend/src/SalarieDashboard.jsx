@@ -10,6 +10,8 @@ import * as XLSX from 'xlsx';
 // Configurer moment.js pour utiliser le français
 moment.locale('fr');
 
+// Correction filtrage mois - commit forcé pour Render
+
 // Fonction utilitaire pour calculer la durée entre deux heures (format HH:mm ou HH:mm:ss)
 function calculeDuree(start, end) {
   if (!start || !end) return '--:--:--';
@@ -45,7 +47,10 @@ export default function SalarieDashboard() {
       const tousPointages = response.data;
       
       // Filtrer les pointages de ce salarié et du mois sélectionné
-      const mesPointagesFiltres = tousPointages.filter(p => p.employee_id === user.employee_id && moment(p.date_pointage).format('YYYY-MM') === selectedMonth);
+      const mesPointagesFiltres = tousPointages.filter(p =>
+        String(p.employee_id) === String(user.employee_id) &&
+        moment(p.date_pointage).format('YYYY-MM') === moment(selectedMonth, 'YYYY-MM').format('YYYY-MM')
+      );
       
       // Créer toutes les sessions du mois
       const sessions = createSessionsMulti(mesPointagesFiltres);
