@@ -43,7 +43,7 @@ export default function SalarieDashboard() {
     
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:4000/api/pointages');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/pointages`);
       const tousPointages = response.data;
       
       // Filtrer les pointages de ce salarié et du mois sélectionné
