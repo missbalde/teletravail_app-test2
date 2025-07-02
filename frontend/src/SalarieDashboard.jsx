@@ -44,6 +44,17 @@ export default function SalarieDashboard() {
     setLoading(true);
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/pointages`);
+      console.log('Réponse API pointages:', response.data);
+      console.log('selectedMonth brut:', selectedMonth);
+      console.log('selectedMonth formaté:', moment(selectedMonth, 'YYYY-MM').format('YYYY-MM'));
+      response.data.forEach(p => {
+        console.log(
+          'date_pointage:', p.date_pointage,
+          'mois_pointage:', moment(p.date_pointage).format('YYYY-MM'),
+          'employee_id:', p.employee_id
+        );
+      });
+      console.log('user.employee_id:', user.employee_id);
       const tousPointages = response.data;
       
       // Filtrer les pointages de ce salarié et du mois sélectionné
