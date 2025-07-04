@@ -110,7 +110,7 @@ export default function SalarieDashboard() {
     if (!user?.employee_id) return;
     
     try {
-      const response = await axios.get('http://localhost:4000/api/plannings');
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/plannings`);
       const toutesTaches = response.data;
       
       console.log('Toutes les tâches reçues:', toutesTaches);
@@ -207,8 +207,8 @@ export default function SalarieDashboard() {
   }
 
   // Générer l'URL à encoder dans le QR code
-  // Utiliser la nouvelle adresse IP locale correcte
-  const qrDataUrl = `http://192.168.10.55:5173/pointage/qr/${user.employee_id}`;
+  // Utiliser une URL relative pour éviter l'IP locale
+  const qrDataUrl = `/pointage/qr/${user.employee_id}`;
   const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrDataUrl)}&size=180x180`;
 
   // Fonction de téléchargement du QR code (version blob)

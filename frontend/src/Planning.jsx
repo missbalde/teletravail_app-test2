@@ -16,6 +16,9 @@ moment.locale('fr', {
 
 const localizer = momentLocalizer(moment);
 
+// Remplace toutes les URLs d'API par la variable d'environnement
+const API_BASE_URL = import.meta.env.VITE_API_URL + '/api';
+
 export default function Planning() {
   const [events, setEvents] = useState([]);
   const [users, setUsers] = useState([]);
@@ -37,7 +40,7 @@ export default function Planning() {
   // Charge les utilisateurs
   const loadUsers = () => {
     setError(null);
-    axios.get('http://localhost:4000/api/employees')
+    axios.get(API_BASE_URL + '/employees')
       .then(res => setUsers(res.data))
       .catch((err) => {
         console.error('Erreur chargement salariés:', err);
@@ -49,7 +52,7 @@ export default function Planning() {
   const loadEvents = () => {
     setError(null);
     setLoading(true);
-    axios.get('http://localhost:4000/api/plannings')
+    axios.get(API_BASE_URL + '/plannings')
       .then(res => {
         try {
         const mapped = res.data.map(p => {
@@ -116,10 +119,10 @@ export default function Planning() {
 
     try {
       if (form.id) {
-        await axios.put(`http://localhost:4000/api/plannings/${form.id}`, dataToSend);
+        await axios.put(API_BASE_URL + `/plannings/${form.id}`, dataToSend);
         alert("Tâche modifiée !");
       } else {
-        await axios.post('http://localhost:4000/api/plannings', dataToSend);
+        await axios.post(API_BASE_URL + '/plannings', dataToSend);
         alert("Tâche créée !");
       }
       setForm({ user_id: '', date: '', start_time: '', end_time: '', task: '', id: null });
@@ -328,7 +331,7 @@ export default function Planning() {
                   onClick={async () => {
                     if (window.confirm('Voulez-vous supprimer cette tâche ?')) {
                       try {
-                      await axios.delete(`http://localhost:4000/api/plannings/${selectedEvent.id}`);
+                      await axios.delete(API_BASE_URL + `/plannings/${selectedEvent.id}`);
                       setShowModal(false);
                       loadEvents();
                       } catch (err) {

@@ -23,18 +23,7 @@ const adminUser = {
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
 
-  // Vérifier si c'est l'admin
-  if (email === adminUser.email && password === adminUser.password) {
-    const token = jwt.sign({ 
-      id: adminUser.id, 
-      email: adminUser.email, 
-      role: adminUser.role,
-      nom: adminUser.nom
-    }, SECRET_KEY, { expiresIn: '1h' });
-    return res.json({ token, user: { id: adminUser.id, email: adminUser.email, role: adminUser.role, nom: adminUser.nom } });
-  }
-
-  // Vérifier si c'est un salarié dans la base de données
+  // Chercher l'utilisateur dans la base
   const sql = 'SELECT * FROM employees WHERE email = ? AND password = ?';
   db.query(sql, [email, password], (err, results) => {
     if (err) {
@@ -43,23 +32,23 @@ app.post('/login', (req, res) => {
     }
 
     if (results.length > 0) {
-      const employee = results[0];
+      const user = results[0];
       const token = jwt.sign({ 
-        id: employee.id, 
-        email: employee.email, 
-        role: 'salarie',
-        nom: `${employee.nom} ${employee.prenom}`,
-        employee_id: employee.id
+        id: user.id, 
+        email: user.email, 
+        role: user.role,
+        nom: `${user.nom} ${user.prenom}`,
+        employee_id: user.id
       }, SECRET_KEY, { expiresIn: '1h' });
       
       return res.json({ 
         token, 
         user: { 
-          id: employee.id, 
-          email: employee.email, 
-          role: 'salarie', 
-          nom: `${employee.nom} ${employee.prenom}`,
-          employee_id: employee.id
+          id: user.id, 
+          email: user.email, 
+          role: user.role,
+          nom: `${user.nom} ${user.prenom}`,
+          employee_id: user.id
         } 
       });
     }

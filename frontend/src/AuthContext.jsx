@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem('token');
     if (token) {
       // Vérifier le token avec le serveur
-      axios.get('http://localhost:4000/api/user', {
+      axios.get(`${import.meta.env.VITE_API_URL}/api/user`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(response => {
