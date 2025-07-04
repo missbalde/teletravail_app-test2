@@ -302,14 +302,12 @@ export default function SalarieDashboard() {
               <small>Connecté en tant que {user.nom}</small>
             </div>
             <div className="d-flex gap-2">
-              <a 
-                href="/badgeuse" 
-                className="btn btn-outline-light btn-sm"
-                target="_blank"
-                rel="noopener noreferrer"
+              <a
+                className="btn btn-primary"
+                href="/badgeuse"
+                style={{ fontWeight: 'bold', fontSize: '1.1rem' }}
               >
-                <i className="fas fa-clock me-1"></i>
-                Pointr
+                Pointer...
               </a>
               <button
                 onClick={handleLogout}

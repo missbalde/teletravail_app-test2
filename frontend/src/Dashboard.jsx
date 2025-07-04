@@ -84,14 +84,12 @@ export default function Dashboard() {
             <h1 className="h3 mb-0 fw-bold">Espace Administrateur</h1>
             <div className="d-flex gap-2">
               <small className="text-light me-3">Connecté en tant que {user.nom}</small>
-              <a 
-                href="/badgeuse" 
-                className="btn btn-outline-light fw-semibold"
-                target="_blank"
-                rel="noopener noreferrer"
+              <a
+                className="btn btn-primary"
+                href="/badgeuse"
+                style={{ fontWeight: 'bold', fontSize: '1.1rem' }}
               >
-                <i className="fas fa-clock me-2"></i>
-                Badgeuse
+                Pointer
               </a>
               <button
                 onClick={handleLogout}

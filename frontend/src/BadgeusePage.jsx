@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from './AuthContext';
 
 export default function BadgeusePage() {
   const [employees, setEmployees] = useState([]);
@@ -8,6 +10,8 @@ export default function BadgeusePage() {
   const [message, setMessage] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date());
   const [backendConnected, setBackendConnected] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   // Mettre à jour l'heure toutes les secondes
   useEffect(() => {
@@ -73,9 +77,14 @@ export default function BadgeusePage() {
       });
 
       setMessage(response.data.message);
-      
-      // Vider le message après 3 secondes
-      setTimeout(() => setMessage(''), 3000);
+      setTimeout(() => {
+        setMessage('');
+        if (user?.role === 'admin') {
+          navigate('/dashboard');
+        } else {
+          navigate('/salarie');
+        }
+      }, 2000);
     } catch (error) {
       console.error('Erreur pointage:', error);
       setMessage(error.response?.data?.error || 'Erreur lors du pointage');
