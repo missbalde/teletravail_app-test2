@@ -207,8 +207,7 @@ export default function SalarieDashboard() {
   }
 
   // Générer l'URL à encoder dans le QR code
-  // Utiliser une URL relative pour éviter l'IP locale
-  const qrDataUrl = `/pointage/qr/${user.employee_id}`;
+  const qrDataUrl = `${window.location.origin}/pointage/qr/${user.employee_id}`;
   const qrImgUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrDataUrl)}&size=180x180`;
 
   // Fonction de téléchargement du QR code (version blob)
@@ -303,7 +302,6 @@ export default function SalarieDashboard() {
             </div>
             <div className="d-flex gap-2">
               <a
-                className="btn btn-primary"
                 href="/badgeuse"
                 style={{ fontWeight: 'bold', fontSize: '1.1rem' }}
               >
