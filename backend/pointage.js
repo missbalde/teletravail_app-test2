@@ -169,48 +169,53 @@ router.delete('/:id', (req, res) => {
 });
 
 // Route pour le pointage via QR code (public)
-router.post('/api/pointage/qr', async (req, res) => {
-  try {
-    const { employee_id, latitude, longitude } = req.body;
-    if (!employee_id) {
-      return res.status(400).json({ error: 'employee_id manquant.' });
-    }
-
-    // Date du jour (format YYYY-MM-DD)
-    const today = new Date().toISOString().slice(0, 10);
-
-    // Récupérer les pointages du jour pour ce salarié
-    const pointages = await db.all(
-      'SELECT * FROM pointages WHERE employee_id = ? AND date_pointage = ?',
-      [employee_id, today]
-    );
-
-    // Déterminer le type de pointage
-    let type_pointage = 'arrivee';
-    if (pointages.some(p => p.type_pointage === 'arrivee' || p.type_pointage === 'arrivée')) {
-      type_pointage = 'depart';
-    }
-
-    // Heure actuelle (format HH:MM:SS)
-    const now = new Date();
-    const heure_pointage = now.toTimeString().slice(0, 8);
-
-    // Enregistrer le pointage (avec ou sans latitude/longitude)
-    let sql, params;
-    if (latitude && longitude) {
-      sql = 'INSERT INTO pointages (employee_id, date_pointage, heure_pointage, type_pointage, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)';
-      params = [employee_id, today, heure_pointage, type_pointage, latitude, longitude];
-    } else {
-      sql = 'INSERT INTO pointages (employee_id, date_pointage, heure_pointage, type_pointage) VALUES (?, ?, ?, ?)';
-      params = [employee_id, today, heure_pointage, type_pointage];
-    }
-    await db.run(sql, params);
-
-    res.json({ message: `Pointage "${type_pointage}" enregistré avec succès !` });
-  } catch (err) {
-    console.error('Erreur pointage QR:', err);
-    res.status(500).json({ error: 'Erreur serveur lors du pointage.' });
+router.post('/api/pointage/qr', (req, res) => {
+  const { employee_id, latitude, longitude } = req.body;
+  if (!employee_id) {
+    return res.status(400).json({ error: 'employee_id manquant.' });
   }
+
+  // Date du jour (format YYYY-MM-DD)
+  const today = new Date().toISOString().slice(0, 10);
+
+  // Récupérer les pointages du jour pour ce salarié
+  db.query(
+    'SELECT * FROM pointages WHERE employee_id = ? AND date_pointage = ?',
+    [employee_id, today],
+    (err, pointages) => {
+      if (err) {
+        console.error('Erreur pointage QR:', err);
+        return res.status(500).json({ error: 'Erreur serveur lors du pointage.' });
+      }
+
+      // Déterminer le type de pointage
+      let type_pointage = 'arrivee';
+      if (pointages.some(p => p.type_pointage === 'arrivee' || p.type_pointage === 'arrivée')) {
+        type_pointage = 'depart';
+      }
+
+      // Heure actuelle (format HH:MM:SS)
+      const now = new Date();
+      const heure_pointage = now.toTimeString().slice(0, 8);
+
+      // Enregistrer le pointage (avec ou sans latitude/longitude)
+      let sql, params;
+      if (latitude && longitude) {
+        sql = 'INSERT INTO pointages (employee_id, date_pointage, heure_pointage, type_pointage, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)';
+        params = [employee_id, today, heure_pointage, type_pointage, latitude, longitude];
+      } else {
+        sql = 'INSERT INTO pointages (employee_id, date_pointage, heure_pointage, type_pointage) VALUES (?, ?, ?, ?)';
+        params = [employee_id, today, heure_pointage, type_pointage];
+      }
+      db.query(sql, params, (err, result) => {
+        if (err) {
+          console.error('Erreur pointage QR:', err);
+          return res.status(500).json({ error: 'Erreur serveur lors du pointage.' });
+        }
+        res.json({ message: `Pointage "${type_pointage}" enregistré avec succès !` });
+      });
+    }
+  );
 });
 
 module.exports = router; 

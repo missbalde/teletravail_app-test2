@@ -16,7 +16,7 @@ export default function QrPointage() {
     // Fonction pour envoyer le pointage (avec ou sans position)
     const sendPointage = (latitude, longitude) => {
       setMessage('Enregistrement du pointage…');
-      fetch(`${import.meta.env.VITE_API_URL}/api/pointage/qr`, {
+      fetch(`${import.meta.env.VITE_API_URL}/api/pointages/qr`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
