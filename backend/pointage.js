@@ -169,7 +169,7 @@ router.delete('/:id', (req, res) => {
 });
 
 // Route pour le pointage via QR code (public)
-router.post('/api/pointage/qr', (req, res) => {
+router.post('/qr', (req, res) => {
   const { employee_id, latitude, longitude } = req.body;
   if (!employee_id) {
     return res.status(400).json({ error: 'employee_id manquant.' });
