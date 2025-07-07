@@ -5,6 +5,7 @@ import 'moment/locale/fr';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
+import AdressePointage from './components/AdressePointage';
 moment.locale('fr');
 
 export default function PointageView() {
@@ -532,15 +533,15 @@ export default function PointageView() {
                     <th>Date</th>
                     <th>Heure d'arrivée</th>
                     <th>Heure de départ</th>
+                    <th>Adresse</th>
                     <th>Statut</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {employees.map((emp) => {
-                    // Chercher la session de pointage de cet employé pour la date sélectionnée
                     const session = pointages.find(
-                      (s) => s.employee_id === emp.id || s.employee_id === emp.employee_id // selon backend
+                      (s) => s.employee_id === emp.id || s.employee_id === emp.employee_id
                     );
                     return (
                       <tr
@@ -553,6 +554,11 @@ export default function PointageView() {
                         <td>{selectedDate ? moment(selectedDate).format('dddd D MMMM YYYY') : '--'}</td>
                         <td>{session && session.entry_time ? formatTime(session.entry_time) : '--'}</td>
                         <td>{session && session.exit_time ? formatTime(session.exit_time) : '--'}</td>
+                        <td>
+                          {session && session.latitude && session.longitude
+                            ? <AdressePointage latitude={session.latitude} longitude={session.longitude} />
+                            : 'Non disponible'}
+                        </td>
                         <td>{session ? (session.entry_time && session.exit_time ? 'Terminé' : session.entry_time ? 'Présent' : 'Absent') : 'Absent'}</td>
                         <td>
                           <button className="btn btn-outline-primary btn-sm me-1" onClick={e => { e.stopPropagation(); openDownloadModal(emp, 'pdf'); }}>PDF</button>
