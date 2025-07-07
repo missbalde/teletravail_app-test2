@@ -5,22 +5,23 @@ export default function AdressePointage({ latitude, longitude }) {
 
   useEffect(() => {
     if (latitude && longitude) {
-      const apiKey = '512c73c1dba4bd21a292c7c5f169f0a5';
-      const url = `http://api.positionstack.com/v1/reverse?access_key=${apiKey}&query=${latitude},${longitude}`;
+      const apiKey = 'f234696a8f354478805941824780c17e';
+      const url = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${apiKey}`;
+
       fetch(url)
         .then(res => res.json())
         .then(data => {
-          if (data && data.data && data.data.length > 0) {
-            setAdresse(data.data[0].label);
+          if (data && data.results && data.results.length > 0) {
+            setAdresse(data.results[0].formatted);
           } else {
             setAdresse('Adresse inconnue');
           }
         })
-        .catch(() => setAdresse('Erreur API'));
+        .catch(() => setAdresse('Erreur lors de la récupération de l’adresse'));
     } else {
-      setAdresse('Non disponible');
+      setAdresse('Coordonnées non disponibles');
     }
   }, [latitude, longitude]);
 
   return <span>{adresse}</span>;
-} 
+}

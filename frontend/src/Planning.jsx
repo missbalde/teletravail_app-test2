@@ -293,6 +293,9 @@ export default function Planning() {
         }}
       />
 
+
+
+
       {/* Modale détails tâche */}
       {selectedEvent && showModal && (
         <div className="modal fade show d-block" tabIndex="-1" role="dialog" onClick={() => setShowModal(false)}>
@@ -322,7 +325,9 @@ export default function Planning() {
                     });
                     setShowModal(false);
                   }}
+                
                 >
+                  
                   Modifier
                 </button>
 

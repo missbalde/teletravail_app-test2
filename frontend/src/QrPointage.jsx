@@ -23,6 +23,7 @@ export default function QrPointage() {
           employee_id,
           ...(latitude && longitude ? { latitude, longitude } : {})
         }),
+        
       })
         .then(async (res) => {
           const data = await res.json();
