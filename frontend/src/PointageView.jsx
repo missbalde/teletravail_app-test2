@@ -555,9 +555,14 @@ export default function PointageView() {
                         <td>{session && session.entry_time ? formatTime(session.entry_time) : '--'}</td>
                         <td>{session && session.exit_time ? formatTime(session.exit_time) : '--'}</td>
                         <td>
-                          {session && session.latitude && session.longitude
-                            ? <AdressePointage latitude={session.latitude} longitude={session.longitude} />
-                            : 'Non disponible'}
+                          {session && session.latitude && session.longitude ? (
+                            <>
+                              <AdressePointage latitude={session.latitude} longitude={session.longitude} />
+                              <br />
+                              <span style={{fontSize: '0.8em', color: '#888'}}>({session.latitude}, {session.longitude})</span>
+                              {console.log('DEBUG AdressePointage:', session.latitude, session.longitude)}
+                            </>
+                          ) : 'Non disponible'}
                         </td>
                         <td>{session ? (session.entry_time && session.exit_time ? 'Terminé' : session.entry_time ? 'Présent' : 'Absent') : 'Absent'}</td>
                         <td>
