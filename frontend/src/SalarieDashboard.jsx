@@ -3,6 +3,7 @@ import { useAuth } from './AuthContext';
 import axios from 'axios';
 import moment from 'moment';
 import 'moment/locale/fr';
+import 'moment-timezone'; // Ajout pour timezone
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
@@ -25,6 +26,16 @@ function calculeDuree(start, end) {
   const m = Math.floor((diff % 3600) / 60);
   const s = diff % 60;
   return `${h}h${m.toString().padStart(2, '0')}m${s.toString().padStart(2, '0')}s`;
+}
+
+// Fonction utilitaire pour afficher l'heure locale Paris
+function formatTimeParis(timeString) {
+  if (!timeString) return '--:--';
+  try {
+    return moment.tz(timeString, 'HH:mm:ss', 'UTC').tz('Europe/Paris').format('HH:mm');
+  } catch {
+    return '--:--';
+  }
 }
 
 export default function SalarieDashboard() {

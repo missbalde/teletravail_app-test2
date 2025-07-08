@@ -200,7 +200,7 @@ router.post('/qr', (req, res) => {
 
       // Enregistrer le pointage (avec ou sans latitude/longitude)
       let sql, params;
-      if (latitude && longitude) {
+      if (req.body.hasOwnProperty('latitude') && req.body.hasOwnProperty('longitude')) {
         sql = 'INSERT INTO pointages (employee_id, date_pointage, heure_pointage, type_pointage, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)';
         params = [employee_id, today, heure_pointage, type_pointage, latitude, longitude];
       } else {
