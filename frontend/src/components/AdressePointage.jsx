@@ -5,21 +5,21 @@ export default function AdressePointage({ latitude, longitude }) {
 
   useEffect(() => {
     if (latitude != null && longitude != null) {
-      const apiKey = 'f234696a8f354478805941824780c17e';
-      const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(latitude + ',' + longitude)}&key=${apiKey}`;
-
-      fetch(url)
+      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+      fetch(url, {
+        headers: {
+          'User-Agent': 'teletravail-app/1.0 (contact@tondomaine.com)'
+        }
+      })
         .then(res => res.json())
         .then(data => {
-          console.log('Données reçues :', data);
-          if (data && data.results && data.results.length > 0) {
-            setAdresse(data.results[0].formatted);
+          if (data && data.display_name) {
+            setAdresse(data.display_name);
           } else {
             setAdresse('Adresse inconnue');
           }
         })
-        .catch((error) => {
-          console.error('Erreur fetch:', error);
+        .catch(() => {
           setAdresse('Erreur lors de la récupération de l’adresse');
         });
     } else {
