@@ -129,11 +129,11 @@ export default function PointageView() {
       console.log('timeString est null/undefined');
       return '--:--';
     }
-    
     try {
-      const formatted = moment(timeString, 'HH:mm:ss').format('HH:mm');
-      console.log('Heure formatée:', formatted);
-      return formatted;
+      // Correction : on suppose que l'heure reçue est en UTC, on l'affiche en Europe/Paris
+      const localTime = moment.tz(timeString, 'HH:mm:ss', 'UTC').tz('Europe/Paris').format('HH:mm');
+      console.log('Heure locale Paris:', localTime);
+      return localTime;
     } catch (error) {
       console.error('Erreur formatage heure:', error, 'timeString:', timeString);
       return '--:--';
@@ -555,13 +555,11 @@ export default function PointageView() {
                         <td>{session && session.entry_time ? formatTime(session.entry_time) : '--'}</td>
                         <td>{session && session.exit_time ? formatTime(session.exit_time) : '--'}</td>
                         <td>
+                          <span style={{fontSize: '0.8em', color: '#c00'}}>lat: {String(session && session.latitude)}, lon: {String(session && session.longitude)}</span>
+                          {console.log('DEBUG session:', session)}
+                          <br />
                           {session && session.latitude && session.longitude ? (
-                            <>
-                              <AdressePointage latitude={session.latitude} longitude={session.longitude} />
-                              <br />
-                              <span style={{fontSize: '0.8em', color: '#888'}}>({session.latitude}, {session.longitude})</span>
-                              {console.log('DEBUG AdressePointage:', session.latitude, session.longitude)}
-                            </>
+                            <AdressePointage latitude={session.latitude} longitude={session.longitude} />
                           ) : 'Non disponible'}
                         </td>
                         <td>{session ? (session.entry_time && session.exit_time ? 'Terminé' : session.entry_time ? 'Présent' : 'Absent') : 'Absent'}</td>
