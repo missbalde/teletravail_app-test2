@@ -558,16 +558,11 @@ export default function PointageView() {
                       >
                         <td><strong>{emp.nom} {emp.prenom}</strong></td>
                         <td>{selectedDate ? moment(selectedDate).format('dddd D MMMM YYYY') : '--'}</td>
-                        <td>{session && session.entry_time ? formatTime(session.entry_time) : '--'}</td>
-                        <td>{session && session.exit_time ? formatTime(session.exit_time) : '--'}</td>
+                        <td>{session && session.entry_time ? session.entry_time : '--'}</td>
                         <td>
-                          <pre style={{fontSize: '0.7em', color: '#c00', maxWidth: 200, overflowX: 'auto'}}>{JSON.stringify(session, null, 2)}</pre>
-                          Heure brute : {session && session.entry_time ? session.entry_time : '--'}<br/>
-                          Heure formatée : {session && session.entry_time ? session.entry_time : '--'}
-                          {/* Pour debug, on affiche l'heure brute et l'heure formatée sans conversion */}
-                          {session && session.latitude && session.longitude ? (
-                            <AdressePointage latitude={session.latitude} longitude={session.longitude} />
-                          ) : 'Non disponible'}
+                          {session && session.latitude && session.longitude
+                            ? <AdressePointage latitude={session.latitude} longitude={session.longitude} />
+                            : 'Non disponible'}
                         </td>
                         <td>{session ? (session.entry_time && session.exit_time ? 'Terminé' : session.entry_time ? 'Présent' : 'Absent') : 'Absent'}</td>
                         <td>
