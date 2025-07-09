@@ -556,9 +556,10 @@ export default function PointageView() {
                         <td>{session && session.entry_time ? formatTime(session.entry_time) : '--'}</td>
                         <td>{session && session.exit_time ? formatTime(session.exit_time) : '--'}</td>
                         <td>
-                          <span style={{fontSize: '0.8em', color: '#c00'}}>lat: {String(session && session.latitude)}, lon: {String(session && session.longitude)}</span>
-                          {console.log('DEBUG session:', session)}
-                          <br />
+                          <pre style={{fontSize: '0.7em', color: '#c00', maxWidth: 200, overflowX: 'auto'}}>{JSON.stringify(session, null, 2)}</pre>
+                          Heure brute : {session && session.entry_time ? session.entry_time : '--'}<br/>
+                          Heure formatée : {session && session.entry_time ? session.entry_time : '--'}
+                          {/* Pour debug, on affiche l'heure brute et l'heure formatée sans conversion */}
                           {session && session.latitude && session.longitude ? (
                             <AdressePointage latitude={session.latitude} longitude={session.longitude} />
                           ) : 'Non disponible'}
