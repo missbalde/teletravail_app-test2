@@ -314,9 +314,9 @@ export default function SalarieDashboard() {
             <div className="d-flex gap-2">
               <a
                 href="/badgeuse"
-                style={{ fontWeight: 'bold', fontSize: '1.1rem' }}
+                style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#fff', background: '#198754', border: 'none', borderRadius: '4px', padding: '6px 18px', textDecoration: 'none', display: 'inline-block' }}
               >
-                Pointer...
+                Pointer
               </a>
               <button
                 onClick={handleLogout}
