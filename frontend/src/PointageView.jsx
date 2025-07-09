@@ -559,6 +559,7 @@ export default function PointageView() {
                         <td><strong>{emp.nom} {emp.prenom}</strong></td>
                         <td>{selectedDate ? moment(selectedDate).format('dddd D MMMM YYYY') : '--'}</td>
                         <td>{session && session.entry_time ? session.entry_time : '--'}</td>
+                        <td>{session && session.exit_time ? session.exit_time : '--'}</td>
                         <td>
                           {session && session.latitude && session.longitude
                             ? <AdressePointage latitude={session.latitude} longitude={session.longitude} />
