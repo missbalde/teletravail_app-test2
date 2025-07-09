@@ -194,9 +194,8 @@ router.post('/qr', (req, res) => {
         type_pointage = 'depart';
       }
 
-      // Heure actuelle (format HH:MM:SS)
-      const now = new Date();
-      const heure_pointage = now.toTimeString().slice(0, 8);
+      // Heure actuelle (Europe/Paris)
+      const heure_pointage = moment().tz('Europe/Paris').format('HH:mm:ss');
 
       // Enregistrer le pointage (avec ou sans latitude/longitude)
       let sql, params;
