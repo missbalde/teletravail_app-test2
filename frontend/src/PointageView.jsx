@@ -79,11 +79,11 @@ export default function PointageView() {
   const createSessions = (rawPointages) => {
     console.log('createSessions appelé avec:', rawPointages);
     const sessions = {};
-    
+
     rawPointages.forEach(pointage => {
       console.log('Traitement pointage:', pointage);
       const key = `${pointage.employee_id}_${pointage.date_pointage}`;
-      
+
       if (!sessions[key]) {
         sessions[key] = {
           employee_id: pointage.employee_id,
@@ -92,22 +92,27 @@ export default function PointageView() {
           entry_time: null,
           exit_time: null,
           entry_id: null,
-          exit_id: null
+          exit_id: null,
+          latitude: null,
+          longitude: null
         };
       }
-      
+
       // Corriger l'inversion des types
       if (pointage.type_pointage === 'arrivée' || pointage.type_pointage === 'arrivee') {
-        console.log('Pointage arrivée détecté:', pointage.heure_pointage);
         sessions[key].entry_time = pointage.heure_pointage;
         sessions[key].entry_id = pointage.id;
+        sessions[key].latitude = pointage.latitude;
+        sessions[key].longitude = pointage.longitude;
       } else if (pointage.type_pointage === 'départ' || pointage.type_pointage === 'depart') {
-        console.log('Pointage départ détecté:', pointage.heure_pointage);
         sessions[key].exit_time = pointage.heure_pointage;
         sessions[key].exit_id = pointage.id;
+        // On peut aussi stocker la position du départ si besoin
+        // sessions[key].latitude_depart = pointage.latitude;
+        // sessions[key].longitude_depart = pointage.longitude;
       }
     });
-    
+
     console.log('Sessions créées:', sessions);
     return Object.values(sessions);
   };
