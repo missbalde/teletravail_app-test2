@@ -20,7 +20,12 @@ const pool = mysql.createPool({
 pool.getConnection((err, connection) => {
   if (err) throw err;
   console.log('Connecté à la base de données MySQL (Railway)');
-  connection.release();
+  // Vérification de la base utilisée
+  connection.query('SELECT DATABASE() AS db', (err, results) => {
+    if (err) console.error('Erreur DB:', err);
+    else console.log('Base de données active:', results[0].db);
+    connection.release();
+  });
 });
 
 module.exports = pool;

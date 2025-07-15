@@ -25,12 +25,13 @@ router.get('/', (req, res) => {
     JOIN employees e ON p.employee_id = e.id
     ORDER BY p.date_pointage DESC, p.heure_pointage DESC
   `;
-  db.query(sql, (err, result) => {
+  db.query(sql, (err, results) => {
     if (err) {
       console.error("ERREUR SQL :", err);
       return res.status(500).json({ error: err.message });
     }
-    res.json(result.rows);
+    console.log('Résultats SQL pointages:', results);
+    res.json(results);
   });
 });
 
