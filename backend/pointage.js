@@ -93,28 +93,28 @@ router.post('/', (req, res) => {
   }
   const date_pointage = getLocalDate();
   const heure_pointage = getLocalTime();
-  db.query('SELECT * FROM employees WHERE id = $1', [employee_id], (err, result) => {
+  db.query('SELECT * FROM employees WHERE id = ?', [employee_id], (err, employees) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    if (result.rows.length === 0) {
+    if (!Array.isArray(employees) || employees.length === 0) {
       return res.status(404).json({ error: 'Employé non trouvé' });
     }
-    const checkSql = `SELECT * FROM pointages WHERE employee_id = $1 AND date_pointage = $2 AND type_pointage = $3`;
+    const checkSql = `SELECT * FROM pointages WHERE employee_id = ? AND date_pointage = ? AND type_pointage = ?`;
     db.query(checkSql, [employee_id, date_pointage, type_pointage], (err, existingResults) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      if (existingResults.rows.length > 0) {
+      if (Array.isArray(existingResults) && existingResults.length > 0) {
         return res.status(400).json({ error: `Pointage ${type_pointage} déjà enregistré aujourd'hui pour cet employé` });
       }
-      const insertSql = `INSERT INTO pointages (employee_id, date_pointage, heure_pointage, type_pointage) VALUES ($1, $2, $3, $4) RETURNING id`;
+      const insertSql = `INSERT INTO pointages (employee_id, date_pointage, heure_pointage, type_pointage) VALUES (?, ?, ?, ?)`;
       db.query(insertSql, [employee_id, date_pointage, heure_pointage, type_pointage], (err, insertResult) => {
         if (err) {
           return res.status(500).json({ error: err.message });
         }
         res.status(201).json({
-          id: insertResult.rows[0].id,
+          id: insertResult.insertId,
           employee_id,
           date_pointage,
           heure_pointage,
@@ -129,12 +129,12 @@ router.post('/', (req, res) => {
 // 🔹 DELETE - Supprimer un pointage (admin seulement)
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
-  const sql = `DELETE FROM pointages WHERE id = $1`;
+  const sql = `DELETE FROM pointages WHERE id = ?`;
   db.query(sql, [id], (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    if (result.rowCount === 0) {
+    if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Pointage non trouvé' });
     }
     res.json({ message: 'Pointage supprimé avec succès' });
@@ -149,26 +149,26 @@ router.post('/qr', (req, res) => {
   }
   const today = new Date().toISOString().slice(0, 10);
   db.query(
-    'SELECT * FROM pointages WHERE employee_id = $1 AND date_pointage = $2',
+    'SELECT * FROM pointages WHERE employee_id = ? AND date_pointage = ?',
     [employee_id, today],
     (err, pointages) => {
       if (err) {
         return res.status(500).json({ error: 'Erreur serveur lors du pointage.' });
       }
       let type_pointage = 'arrivee';
-      if (pointages.rows.some(p => p.type_pointage === 'arrivee' || p.type_pointage === 'arrivée')) {
+      if (Array.isArray(pointages) && pointages.some(p => p.type_pointage === 'arrivee' || p.type_pointage === 'arrivée')) {
         type_pointage = 'depart';
       }
       const heure_pointage = moment().tz('Europe/Paris').format('HH:mm:ss');
       let sql, params;
       if (req.body.hasOwnProperty('latitude') && req.body.hasOwnProperty('longitude')) {
-        sql = 'INSERT INTO pointages (employee_id, date_pointage, heure_pointage, type_pointage, latitude, longitude) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id';
+        sql = 'INSERT INTO pointages (employee_id, date_pointage, heure_pointage, type_pointage, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)';
         params = [employee_id, today, heure_pointage, type_pointage, latitude, longitude];
       } else {
-        sql = 'INSERT INTO pointages (employee_id, date_pointage, heure_pointage, type_pointage) VALUES ($1, $2, $3, $4) RETURNING id';
+        sql = 'INSERT INTO pointages (employee_id, date_pointage, heure_pointage, type_pointage) VALUES (?, ?, ?, ?)';
         params = [employee_id, today, heure_pointage, type_pointage];
       }
-      db.query(sql, params, (err, result) => {
+      db.query(sql, params, (err, insertResult) => {
         if (err) {
           return res.status(500).json({ error: 'Erreur serveur lors du pointage.' });
         }
