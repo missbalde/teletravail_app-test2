@@ -30,7 +30,10 @@ router.get('/', (req, res) => {
       console.error("ERREUR SQL :", err);
       return res.status(500).json({ error: err.message });
     }
-    console.log('Résultats SQL pointages:', results);
+    if (!Array.isArray(results)) {
+      console.error('Résultat SQL non tableau:', results);
+      return res.status(500).json([]);
+    }
     res.json(results);
   });
 });
@@ -42,15 +45,19 @@ router.get('/employee/:employeeId', (req, res) => {
     SELECT p.*, e.nom, e.prenom 
     FROM pointages p 
     JOIN employees e ON p.employee_id = e.id
-    WHERE p.employee_id = $1
+    WHERE p.employee_id = ?
     ORDER BY p.date_pointage DESC, p.heure_pointage DESC
   `;
-  db.query(sql, [employeeId], (err, result) => {
+  db.query(sql, [employeeId], (err, results) => {
     if (err) {
       console.error("ERREUR SQL :", err);
       return res.status(500).json({ error: err.message });
     }
-    res.json(result.rows);
+    if (!Array.isArray(results)) {
+      console.error('Résultat SQL non tableau:', results);
+      return res.status(500).json([]);
+    }
+    res.json(results);
   });
 });
 
@@ -62,15 +69,19 @@ router.get('/today/:employeeId', (req, res) => {
     SELECT p.*, e.nom, e.prenom 
     FROM pointages p 
     JOIN employees e ON p.employee_id = e.id
-    WHERE p.employee_id = $1 AND p.date_pointage = $2
+    WHERE p.employee_id = ? AND p.date_pointage = ?
     ORDER BY p.heure_pointage ASC
   `;
-  db.query(sql, [employeeId, today], (err, result) => {
+  db.query(sql, [employeeId, today], (err, results) => {
     if (err) {
       console.error("ERREUR SQL :", err);
       return res.status(500).json({ error: err.message });
     }
-    res.json(result.rows);
+    if (!Array.isArray(results)) {
+      console.error('Résultat SQL non tableau:', results);
+      return res.status(500).json([]);
+    }
+    res.json(results);
   });
 });
 
